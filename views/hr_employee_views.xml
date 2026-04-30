@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend hr.employee form with performance smart buttons -->
+
+    <record id="view_hr_employee_advanced_form" model="ir.ui.view">
+        <field name="name">hr.employee.advanced.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_performance_reviews" type="object"
+                        class="oe_stat_button" icon="fa-bar-chart">
+                    <field name="performance_review_count" widget="statinfo"
+                           string="Reviews"/>
+                </button>
+                <button name="action_view_training_plans" type="object"
+                        class="oe_stat_button" icon="fa-graduation-cap">
+                    <field name="training_plan_count" widget="statinfo"
+                           string="Trainings"/>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

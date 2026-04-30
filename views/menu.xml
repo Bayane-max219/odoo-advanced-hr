@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend existing Employees menu -->
+
+    <menuitem id="menu_advanced_hr_performance"
+              name="Performance"
+              parent="hr.menu_hr_root"
+              sequence="20"/>
+
+    <menuitem id="menu_performance_reviews"
+              name="Performance Reviews"
+              parent="menu_advanced_hr_performance"
+              action="action_hr_performance_review"
+              sequence="10"/>
+
+    <menuitem id="menu_training_plans"
+              name="Training Plans"
+              parent="menu_advanced_hr_performance"
+              action="action_hr_training_plan"
+              sequence="20"/>
+
+    <menuitem id="menu_advanced_hr_reports"
+              name="Reports"
+              parent="menu_advanced_hr_performance"
+              sequence="50"/>
+
+    <menuitem id="menu_skills_report_action"
+              name="Skills Matrix Report"
+              parent="menu_advanced_hr_reports"
+              action="action_report_employee_skills"
+              sequence="10"/>
+
+</odoo>

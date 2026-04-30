@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ─── PERFORMANCE REVIEW ─── -->
+
+    <record id="view_hr_performance_review_form" model="ir.ui.view">
+        <field name="name">hr.performance.review.form</field>
+        <field name="model">hr.performance.review</field>
+        <field name="arch" type="xml">
+            <form string="Performance Review">
+                <header>
+                    <button name="action_start_self_assessment" string="Start Self Assessment"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_submit_self_assessment" string="Submit Self Assessment"
+                            type="object" class="btn-primary"
+                            invisible="state != 'self_assessment'"/>
+                    <button name="action_complete" string="Complete Review"
+                            type="object" class="btn-primary"
+                            invisible="state not in ('manager_review', 'calibration')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,self_assessment,manager_review,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Review Details">
+                            <field name="employee_id"/>
+                            <field name="reviewer_id"/>
+                            <field name="review_type"/>
+                            <field name="date_start"/>
+                        </group>
+                        <group string="Deadlines">
+                            <field name="date_self_assessment_deadline"/>
+                            <field name="date_manager_review_deadline"/>
+                            <field name="average_score" widget="float" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Competencies" name="competencies">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="skill_id"/>
+                                    <field name="self_score" widget="priority"/>
+                                    <field name="manager_score" widget="priority"/>
+                                    <field name="new_level_id"/>
+                                    <field name="self_comment"/>
+                                    <field name="manager_comment"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Overall Assessment" name="assessment">
+                            <group>
+                                <group string="Self Assessment">
+                                    <field name="self_overall_score"/>
+                                    <field name="self_comments"/>
+                                </group>
+                                <group string="Manager Assessment">
+                                    <field name="manager_overall_score"/>
+                                    <field name="manager_comments"/>
+                                </group>
+                            </group>
+                            <group string="Forward Planning">
+                                <field name="objectives_next_period"/>
+                                <field name="development_plan"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_performance_review_list" model="ir.ui.view">
+        <field name="name">hr.performance.review.list</field>
+        <field name="model">hr.performance.review</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Reviews"
+                  decoration-success="state == 'completed'"
+                  decoration-warning="state == 'manager_review'"
+                  decoration-info="state == 'self_assessment'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="reviewer_id"/>
+                <field name="review_type"/>
+                <field name="date_start"/>
+                <field name="average_score" widget="float"/>
+                <field name="manager_overall_score"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'completed'"
+                       decoration-warning="state == 'manager_review'"
+                       decoration-info="state == 'self_assessment'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_performance_review_search" model="ir.ui.view">
+        <field name="name">hr.performance.review.search</field>
+        <field name="model">hr.performance.review</field>
+        <field name="arch" type="xml">
+            <search string="Performance Reviews">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="reviewer_id"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Self Assessment" name="self" domain="[('state','=','self_assessment')]"/>
+                <filter string="Manager Review" name="manager" domain="[('state','=','manager_review')]"/>
+                <filter string="Completed" name="completed" domain="[('state','=','completed')]"/>
+                <separator/>
+                <filter string="Annual Reviews" name="annual" domain="[('review_type','=','annual')]"/>
+                <filter string="360° Reviews" name="f360" domain="[('review_type','=','360')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_employee"
+                            context="{'group_by': 'employee_id'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'review_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_performance_review" model="ir.actions.act_window">
+        <field name="name">Performance Reviews</field>
+        <field name="res_model">hr.performance.review</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No performance reviews yet</p>
+            <p>Create annual or mid-year reviews to evaluate employee performance and update skill levels.</p>
+        </field>
+    </record>
+
+</odoo>

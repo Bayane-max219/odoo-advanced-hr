@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Skill types -->
+        <record id="skill_type_technical" model="hr.skill.type">
+            <field name="name">Technical Skills</field>
+        </record>
+
+        <record id="skill_type_soft" model="hr.skill.type">
+            <field name="name">Soft Skills</field>
+        </record>
+
+        <!-- Step 2: Create skill levels referencing the types -->
+        <record id="skill_level_beginner" model="hr.skill.level">
+            <field name="name">Beginner</field>
+            <field name="skill_type_id" ref="skill_type_technical"/>
+            <field name="level_progress">20</field>
+            <field name="default_level" eval="True"/>
+        </record>
+
+        <record id="skill_level_intermediate" model="hr.skill.level">
+            <field name="name">Intermediate</field>
+            <field name="skill_type_id" ref="skill_type_technical"/>
+            <field name="level_progress">40</field>
+        </record>
+
+        <record id="skill_level_advanced" model="hr.skill.level">
+            <field name="name">Advanced</field>
+            <field name="skill_type_id" ref="skill_type_technical"/>
+            <field name="level_progress">60</field>
+        </record>
+
+        <record id="skill_level_expert" model="hr.skill.level">
+            <field name="name">Expert</field>
+            <field name="skill_type_id" ref="skill_type_technical"/>
+            <field name="level_progress">80</field>
+        </record>
+
+        <record id="skill_level_master" model="hr.skill.level">
+            <field name="name">Master</field>
+            <field name="skill_type_id" ref="skill_type_technical"/>
+            <field name="level_progress">100</field>
+        </record>
+
+        <record id="skill_level_soft_developing" model="hr.skill.level">
+            <field name="name">Developing</field>
+            <field name="skill_type_id" ref="skill_type_soft"/>
+            <field name="level_progress">25</field>
+            <field name="default_level" eval="True"/>
+        </record>
+
+        <record id="skill_level_soft_proficient" model="hr.skill.level">
+            <field name="name">Proficient</field>
+            <field name="skill_type_id" ref="skill_type_soft"/>
+            <field name="level_progress">50</field>
+        </record>
+
+        <record id="skill_level_soft_exemplary" model="hr.skill.level">
+            <field name="name">Exemplary</field>
+            <field name="skill_type_id" ref="skill_type_soft"/>
+            <field name="level_progress">100</field>
+        </record>
+
+    </data>
+</odoo>

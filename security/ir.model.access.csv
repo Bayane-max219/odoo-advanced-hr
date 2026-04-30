@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_performance_review,hr.performance.review,model_hr_performance_review,base.group_user,1,1,1,0
+access_performance_review_line,hr.performance.review.line,model_hr_performance_review_line,base.group_user,1,1,1,1
+access_training_plan,hr.training.plan,model_hr_training_plan,base.group_user,1,1,1,0
+access_training_plan_manager,hr.training.plan manager,model_hr_training_plan,base.group_system,1,1,1,1

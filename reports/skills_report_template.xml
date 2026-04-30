@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_employee_skills_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="employee">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-6">
+                                <h2>Skills Report</h2>
+                                <h3><t t-esc="employee.name"/></h3>
+                                <p t-if="employee.job_id">
+                                    <strong>Position: </strong>
+                                    <t t-esc="employee.job_id.name"/>
+                                </p>
+                                <p t-if="employee.department_id">
+                                    <strong>Department: </strong>
+                                    <t t-esc="employee.department_id.name"/>
+                                </p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p>
+                                    <strong>Performance Score: </strong>
+                                    <t t-esc="'%.1f / 5.0' % employee.overall_performance_score"/>
+                                </p>
+                                <p t-if="employee.last_review_date">
+                                    <strong>Last Review: </strong>
+                                    <t t-esc="employee.last_review_date"/>
+                                </p>
+                                <p>
+                                    <strong>Skill Gaps: </strong>
+                                    <t t-esc="employee.skills_gap_count"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Skills matrix -->
+                        <h4>Skills Matrix</h4>
+                        <t t-if="employee.employee_skill_ids">
+                            <table class="table table-bordered table-sm" style="font-size:11px;">
+                                <thead style="background-color:#875A7B; color:white;">
+                                    <tr>
+                                        <th>Skill</th>
+                                        <th>Type</th>
+                                        <th>Current Level</th>
+                                        <th>Target Level</th>
+                                        <th>Progress</th>
+                                        <th>Last Evaluated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="employee.employee_skill_ids" t-as="skill_line">
+                                        <tr>
+                                            <td><t t-esc="skill_line.skill_id.name"/></td>
+                                            <td><t t-esc="skill_line.skill_type_id.name"/></td>
+                                            <td><t t-esc="skill_line.skill_level_id.name"/></td>
+                                            <td>
+                                                <t t-if="skill_line.target_level_id">
+                                                    <t t-esc="skill_line.target_level_id.name"/>
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </td>
+                                            <td>
+                                                <div style="background:#eee; border-radius:3px; height:10px; width:100%;">
+                                                    <div t-attf-style="background:#875A7B; width:#{skill_line.level_progress}%; height:10px; border-radius:3px;"/>
+                                                </div>
+                                                <small><t t-esc="skill_line.level_progress"/>%</small>
+                                            </td>
+                                            <td>
+                                                <t t-if="skill_line.last_evaluated">
+                                                    <t t-esc="skill_line.last_evaluated"/>
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <p class="text-muted">No skills recorded for this employee.</p>
+                        </t>
+
+                        <!-- Training plans -->
+                        <h4 style="margin-top:24px;">Active Training Plans</h4>
+                        <t t-set="active_trainings" t-value="employee.training_plan_ids.filtered(lambda t: t.state in ['draft','in_progress'])"/>
+                        <t t-if="active_trainings">
+                            <table class="table table-bordered table-sm" style="font-size:11px;">
+                                <thead style="background-color:#875A7B; color:white;">
+                                    <tr>
+                                        <th>Skill</th>
+                                        <th>Current → Target</th>
+                                        <th>Type</th>
+                                        <th>Provider</th>
+                                        <th>Deadline</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="active_trainings" t-as="tp">
+                                        <tr>
+                                            <td><t t-esc="tp.skill_id.name"/></td>
+                                            <td>
+                                                <t t-esc="tp.current_level_id.name or '—'"/>
+                                                →
+                                                <t t-esc="tp.target_level_id.name or '—'"/>
+                                            </td>
+                                            <td><t t-esc="tp.training_type"/></td>
+                                            <td><t t-esc="tp.provider or '—'"/></td>
+                                            <td><t t-esc="tp.deadline or '—'"/></td>
+                                            <td><t t-esc="tp.state"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <p class="text-muted">No active training plans.</p>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
